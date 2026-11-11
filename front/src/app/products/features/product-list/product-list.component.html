@@ -54,6 +54,18 @@
             <div class="flex gap-3 my-2">
 
               @if (product.inventoryStatus !== ProductInvotoryStatus.OUTOFSTOCK) {
+
+                <p-inputNumber
+                  [ngModel]="getQuantity(product.id)"
+                  (ngModelChange)="setQuantity(product.id, $event)"
+                  [min]="1"
+                  [max]="99"
+                  [showButtons]="true"
+                  buttonLayout="horizontal"
+                  decrementButtonIcon="pi pi-minus"
+                  incrementButtonIcon="pi pi-plus">
+                </p-inputNumber>
+
                 <p-button label="Ajouter au panier" severity="primary" (onClick)="onAdd(product)"/>
               }
 

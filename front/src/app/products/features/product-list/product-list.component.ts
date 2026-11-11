@@ -37,9 +37,10 @@ const emptyProduct: Product = {
 })
 export class ProductListComponent implements OnInit {
   private readonly productsService = inject(ProductsService);
-  private readonly cartService = inject(CartService);
+  protected readonly cartService = inject(CartService);
 
   public readonly products = this.productsService.products;
+  public quantities = signal<Record<number, number>>({});
 
   public isDialogVisible = false;
   public isCreation = false;
@@ -86,7 +87,7 @@ export class ProductListComponent implements OnInit {
   }
 
   protected onAdd(product: any) {
-    this.cartService.add(product);
+    this.cartService.add(product, this.getQuantity(product.id));
   }
 
   public onSearch(value: string): void {
@@ -119,4 +120,15 @@ export class ProductListComponent implements OnInit {
 
   protected readonly ProductInvotoryStatus = ProductInvotoryStatus;
 
+
+  protected getQuantity(id: number) {
+    return this.quantities()[id] ?? 1;
+  }
+
+  protected setQuantity(id: number, quantity: number) {
+    this.quantities.update(values => ({
+      ...values,
+      [id]: quantity
+    }));
+  }
 }
