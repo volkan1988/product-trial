@@ -1,0 +1,70 @@
+<p-card header="Nous contacter" class="block m-2 text-center">
+
+  <p-toast [position]="'top-center'"/>
+
+  <form [formGroup]="contactForm" (ngSubmit)="submit()">
+
+
+    <div class="text-left mt-2">
+      <label for="email">E-mail *</label>
+      <input
+        pInputText
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="exemple@exemple.fr"
+        class="mt-2 w-full"
+        [class.ng-invalid]="contactForm.controls.email.touched && contactForm.controls.email.invalid"
+        [class.ng-dirty]="contactForm.controls.email.touched"
+      />
+
+      @if (contactForm.controls.email.touched && contactForm.controls.email.invalid) {
+        <small class="text-red-500">
+          @if (contactForm.controls.email.hasError('required')) {
+            L'adresse e-mail est obligatoire.
+          } @else if (contactForm.controls.email.hasError('email')) {
+            L'adresse e-mail est invalide.
+          }
+        </small>
+      }
+    </div>
+
+    <div class="text-left mt-2">
+      <label for="message">Message *</label>
+      <textarea
+        pInputTextarea
+        formControlName="message"
+        rows="6"
+        class="mt-2 w-full"
+        [maxlength]="MESSAGE_MAX_LENGTH"
+        [class.ng-invalid]="contactForm.controls.message.touched && contactForm.controls.message.invalid"
+        [class.ng-dirty]="contactForm.controls.message.touched"
+      >
+      </textarea>
+
+      <div class="flex justify-content-between flex-wrap">
+        <small class="flex align-items-center justify-content-center text-red-500">
+          @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+
+            @if (contactForm.controls.message.hasError('required')) {
+              Le message est obligatoire.
+            } @else if (contactForm.controls.message.hasError('maxlength')) {
+              Le message ne doit pas dépasser {{ MESSAGE_MAX_LENGTH }} caractères.
+            }
+
+          }
+        </small>
+
+        <div class="flex align-items-center justify-content-center text-sm text-color-secondary">
+          {{ contactForm.controls.message.value?.length ?? 0 }}/300
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-right mt-2">
+      <p-button label="Envoyer" severity="primary" type="submit"/>
+    </div>
+
+  </form>
+</p-card>

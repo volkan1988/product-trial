@@ -1,0 +1,97 @@
+<h1 class="text-center">Liste des produits</h1>
+
+<p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
+
+<div class="m-2">
+  <label for="search">Rechercher un produit (par nom, description, référence ou catégorie)</label>
+  <input
+    id="search"
+    pInputText
+    type="text"
+    (input)="onSearch($any($event.target).value)"
+    class="w-full my-2"
+  />
+</div>
+
+<p-dataView #dv [value]="products()">
+  <ng-template pTemplate="list" let-products>
+    @for (product of paginatedProducts(); track product.id) {
+      <p-card class="block mb-2">
+        <div class="flex justify-content-between flex-wrap">
+
+          <div class="align-items-center justify-content-center">
+            <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+            <div class="text-lg font-medium text-900 mt-2">
+              {{ product.name }}
+
+              @for (i of [1, 2, 3, 4, 5]; track i) {
+
+                @if (i < product.rating) {
+                  <i class="pi pi-star-fill text-yellow-500"></i>
+                } @else {
+                  <i class="pi pi-star text-yellow-500"></i>
+                }
+              }
+            </div>
+            <span class="font-medium text-secondary text-sm">{{ product.description }}</span>
+            <div class="font-medium text-secondary text-sm font-italic my-2">Ref : {{ product.code }}</div>
+            <div class="text-lg font-medium text-900 ">
+              {{ product.price | currency:'EUR':'symbol':'1.2-2': 'fr-FR' }}
+            </div>
+
+            @switch (product.inventoryStatus) {
+              @case (ProductInvotoryStatus.INSTOCK) {
+                <span class="text-green-500">En stock</span>
+              }
+              @case (ProductInvotoryStatus.LOWSTOCK) {
+                <span class="text-orange-500">Stock faible</span>
+              }
+              @case (ProductInvotoryStatus.OUTOFSTOCK) {
+                <span class="text-red-500">En rupture</span>
+              }
+            }
+
+            <div class="flex gap-3 my-2">
+
+              @if (product.inventoryStatus !== ProductInvotoryStatus.OUTOFSTOCK) {
+                <p-button label="Ajouter au panier" severity="primary" (onClick)="onAdd(product)"/>
+              }
+
+              <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
+              <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)"/>
+            </div>
+
+          </div>
+
+          <div class="align-items-center justify-content-center">
+            <img class="image-div" [src]="'assets/images/' + product.image"
+                 (error)="$any($event.target).src = 'assets/images/default.png'" [alt]="product.name"/>
+          </div>
+
+        </div>
+
+      </p-card>
+    } @empty {
+      <p>Aucun produit trouvé.</p>
+    }
+
+    <p-paginator
+      [first]="first()"
+      [rows]="rows()"
+      [totalRecords]="filteredProducts().length"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      (onPageChange)="onPageChange($event)">
+    </p-paginator>
+
+  </ng-template>
+</p-dataView>
+
+<p-dialog [(visible)]="isDialogVisible"
+          [style]="{ width: '50vw' }"
+          header="Ajout/Edition produit">
+  <app-product-form
+    [product]="editedProduct()"
+    (save)="onSave($event)"
+    (cancel)="onCancel()"
+  />
+</p-dialog>
