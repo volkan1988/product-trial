@@ -1,4 +1,4 @@
-package fr.volkan.back.domain;
+package fr.volkan.back.product.domain;
 
 public enum InventoryStatus {
     INSTOCK,
