@@ -1,30 +1,25 @@
 package fr.volkan.back.product.dto;
 
 import fr.volkan.back.product.domain.InventoryStatus;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 public class UpdateProductRequest {
 
-    private Long id;
-    private String code;
-
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
     private String description;
 
     private String image;
 
-    @NotNull
+    @NotBlank
     private String category;
 
     @PositiveOrZero
@@ -37,6 +32,4 @@ public class UpdateProductRequest {
     private Long shellId;
     private InventoryStatus inventoryStatus;
     private int rating;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

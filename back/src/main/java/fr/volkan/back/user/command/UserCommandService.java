@@ -38,7 +38,7 @@ public class UserCommandService {
             throw new ReservedEmailException();
         }
 
-        if (userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmailIgnoreCase(request.getEmail())) {
             throw new UserAlreadyExistsException();
         }
 
