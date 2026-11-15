@@ -1,24 +1,71 @@
-GET http://localhost:8080/api/products
+### Partie user
 
-###
-
-GET http://localhost:8080/api/products/1
-
-###
-
-POST http://localhost:8080/api/products
+### Création de l'utilisateur
+POST http://localhost:8080/api/auth/account
 Content-Type: application/json
 
 {
-  "name": "Nom du produit",
+  "email": "test@test.com",
+  "firstname": "Test",
+  "username": "test",
+  "password": "password"
+}
+
+### Connexion de l'utilisateur (utiliser le token dans les requêtes de récupération de produits)
+
+POST http://localhost:8080/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "password"
+}
+> {%
+    client.global.set("token", response.body.token);
+%}
+### Connexion de l'utilisateur admin (utiliser le token dans les requêtes de produits)
+
+POST http://localhost:8080/api/auth/token
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### Récupération de la liste des produits
+
+GET http://localhost:8080/api/products
+Authorization: Bearer {{token}}
+
+### Récupération du détail d'un produit
+
+GET http://localhost:8080/api/products/{{productId}}
+Authorization: Bearer {{token}}
+
+### Création d'un produit (uniquement pour l'utilisateur admin)
+
+POST http://localhost:8080/api/products
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Nom du produit 4",
   "description": "Ma description",
   "price": 10.50,
   "category": "Catégorie"
 }
+> {%
+    client.global.set("productId", response.body.id);
+%}
 
-###
+### Modification d'un produit (uniquement pour l'utilisateur admin)
 
-PUT http://localhost:8080/api/products/1
+PUT http://localhost:8080/api/products/{{productId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -27,3 +74,52 @@ Content-Type: application/json
   "price": 15.50,
   "category": "Catégorie 2"
 }
+
+### Suppression d'un produit (uniquement pour l'utilisateur admin)
+
+DELETE http://localhost:8080/api/products/{{productId}}
+Authorization: Bearer {{token}}
+
+
+### Récupère le panier
+
+GET http://localhost:8080/api/cart
+Authorization: Bearer {{token}}
+
+### Ajout d'un produit au panier
+
+POST http://localhost:8080/api/cart/{{productId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+
+### Met à jour la quantité d'un produit du panier
+
+PUT http://localhost:8080/api/cart/{{productId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantity": 1
+}
+
+### Supprime un produit du panier
+
+DELETE http://localhost:8080/api/cart/{{productId}}
+Authorization: Bearer {{token}}
+
+### Supprime le panier
+
+DELETE http://localhost:8080/api/cart
+Authorization: Bearer {{token}}
+
+### Ajoute un produit à la liste de souhait
+POST http://localhost:8080/api/wish/{{productId}}
+Authorization: Bearer {{token}}
+
+### Supprime un produit de la liste de souhait
+DELETE http://localhost:8080/api/wish/{{productId}}
+Authorization: Bearer {{token}}

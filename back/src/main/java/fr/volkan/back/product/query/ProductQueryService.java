@@ -18,11 +18,22 @@ public class ProductQueryService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Récupère la liste des produits.
+     *
+     * @return La liste des produits.
+     */
     public List<Product> findProducts() {
         return productRepository.findAll();
     }
 
-    public Product findProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+    /**
+     * Récupère un produit par identifiant.
+     *
+     * @param productId Identifiant du produit à retrouver.
+     * @return Un produit par identifiant.
+     */
+    public Product findProduct(Long productId) {
+        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
 }

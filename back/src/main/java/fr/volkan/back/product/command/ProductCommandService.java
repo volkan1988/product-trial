@@ -8,6 +8,7 @@ import fr.volkan.back.product.exception.ProductNotFoundException;
 import fr.volkan.back.product.repository.ProductRepository;
 import fr.volkan.back.utils.ProductCodeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Transactional
+@PreAuthorize("@securityService.isAdmin()")
 @Slf4j
 public class ProductCommandService {
 
@@ -24,6 +26,12 @@ public class ProductCommandService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Permet à l'administrateur de créer un produit.
+     *
+     * @param request Requête contenant les données pour la création du produit.
+     * @return Le produit créé.
+     */
     public Product createProduct(ProductRequest request) {
 
         if (productRepository.existsByName(request.getName())) {
@@ -41,7 +49,7 @@ public class ProductCommandService {
         String code;
         do {
             code = ProductCodeUtils.generateCode();
-        } while(productRepository.existsByCode(code));
+        } while (productRepository.existsByCode(code));
 
         product.setCode(code);
 
@@ -49,22 +57,34 @@ public class ProductCommandService {
         return productRepository.save(product);
     }
 
-    public void deleteProduct(Long id) {
+    /**
+     * Permet à l'administrateur de supprimer un produit.
+     *
+     * @param productId Identifiant du produit à supprimer.
+     */
+    public void deleteProduct(Long productId) {
 
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            log.info("Product deleted: {}", id);
+        if (productRepository.existsById(productId)) {
+            productRepository.deleteById(productId);
+            log.info("Product deleted: {}", productId);
         } else {
             throw new ProductNotFoundException();
         }
 
     }
 
-    public Product updateProduct(Long id, UpdateProductRequest request) {
+    /**
+     * Permet à l'administrateur de mettre à jour un produit.
+     *
+     * @param productId Identifiant du produit.
+     * @param request
+     * @return Le produit mis à jour.
+     */
+    public Product updateProduct(Long productId, UpdateProductRequest request) {
 
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
-        if (productRepository.existsByNameAndIdIsNot(product.getName(), id)) {
+        if (productRepository.existsByNameAndIdIsNot(product.getName(), productId)) {
             throw new ProductAlreadyExistsException();
         }
 
