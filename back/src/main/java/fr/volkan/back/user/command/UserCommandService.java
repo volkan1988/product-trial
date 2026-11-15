@@ -1,7 +1,9 @@
 package fr.volkan.back.user.command;
 
+import fr.volkan.back.security.service.SecurityService;
 import fr.volkan.back.user.dto.UserRequest;
 import fr.volkan.back.user.entity.User;
+import fr.volkan.back.user.exception.ReservedEmailException;
 import fr.volkan.back.user.exception.UserAlreadyExistsException;
 import fr.volkan.back.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,10 @@ public class UserCommandService {
      * @return L'utilisateur créé.
      */
     public User createUser(UserRequest request) {
+
+        if (SecurityService.ADMIN_EMAIL.equalsIgnoreCase(request.getEmail())) {
+            throw new ReservedEmailException();
+        }
 
         if (userRepository.existsByUsername(request.getUsername()) || userRepository.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException();

@@ -84,7 +84,7 @@ public class ProductCommandService {
 
         Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
 
-        if (productRepository.existsByNameAndIdIsNot(product.getName(), productId)) {
+        if (productRepository.existsByNameAndIdIsNot(request.getName(), productId)) {
             throw new ProductAlreadyExistsException();
         }
 

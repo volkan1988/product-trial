@@ -13,7 +13,7 @@ import java.util.Objects;
 @Service
 public class SecurityService {
 
-    private static final String ADMIN_EMAIL = "admin@admin.com";
+    public static final String ADMIN_EMAIL = "admin@admin.com";
 
     private final UserQueryService userQueryService;
 

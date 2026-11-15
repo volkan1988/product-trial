@@ -45,10 +45,10 @@ public class UserQueryService {
      */
     public UserConnexionResponse connectAccount(UserConnexionRequest userConnexionRequest) {
 
-        User user = userRepository.findByUsername(userConnexionRequest.getUsername()).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByUsername(userConnexionRequest.getUsername()).orElse(null);
 
-        if (!passwordEncoder.matches(userConnexionRequest.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("Invalid credentials");
+        if (user == null || !passwordEncoder.matches(userConnexionRequest.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password");
         }
 
         String token = jwtService.generateToken(user.getUsername());
