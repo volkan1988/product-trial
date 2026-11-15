@@ -1,7 +1,7 @@
 package fr.volkan.back.wish.controller;
 
 import fr.volkan.back.wish.command.WishItemCommandService;
-import fr.volkan.back.wish.command.WishItemQueryService;
+import fr.volkan.back.wish.query.WishItemQueryService;
 import fr.volkan.back.wish.dto.WishItemResponse;
 import fr.volkan.back.wish.dto.WishItemsResponse;
 import fr.volkan.back.wish.mapper.WishItemMapper;

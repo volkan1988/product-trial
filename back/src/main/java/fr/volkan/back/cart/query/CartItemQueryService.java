@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,9 +31,7 @@ public class CartItemQueryService {
      * @return La liste des éléments du panier de l'utilisateur du contexte.
      */
     public List<CartItem> getCart() {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
+        String username = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
 
         User user = userQueryService.getUserByUsername(username);
 
