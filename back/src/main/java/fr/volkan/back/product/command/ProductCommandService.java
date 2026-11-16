@@ -92,6 +92,11 @@ public class ProductCommandService {
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
         product.setCategory(request.getCategory());
+        product.setImage(request.getImage());
+        product.setQuantity(request.getQuantity());
+        product.setShellId(request.getShellId());
+        product.setInventoryStatus(request.getInventoryStatus());
+        product.setRating(request.getRating());
         product.setUpdatedAt(LocalDateTime.now());
 
         Product updatedProduct = productRepository.save(product);

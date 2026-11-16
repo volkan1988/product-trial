@@ -25,7 +25,7 @@ public class UpdateProductRequest {
     @PositiveOrZero
     private double price;
 
-    @Positive
+    @PositiveOrZero
     private int quantity;
 
     private String internalReference;

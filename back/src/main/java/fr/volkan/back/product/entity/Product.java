@@ -38,7 +38,6 @@ public class Product {
 
     private double price;
     private int quantity;
-    private String internalReference;
     private Long shellId;
 
     @Enumerated(EnumType.STRING)
