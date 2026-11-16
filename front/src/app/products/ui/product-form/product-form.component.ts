@@ -47,8 +47,9 @@ import {Product} from "../../../shared/models/product.model";
         </textarea>
       </div>
       <div class="form-field">
-        <label for="description">Catégorie</label>
+        <label for="categories">Catégorie</label>
         <p-dropdown
+          id="categories"
           [options]="categories"
           [(ngModel)]="editedProduct().category"
           name="category"

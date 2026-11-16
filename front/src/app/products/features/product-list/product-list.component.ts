@@ -9,7 +9,7 @@ import {ProductsService} from "../../../shared/services/products.service";
 import {CartService} from "../../../shared/services/cart.service";
 import {Product, ProductInvotoryStatus} from "../../../shared/models/product.model";
 import {InputTextModule} from "primeng/inputtext";
-import { PaginatorModule } from 'primeng/paginator';
+import {PaginatorModule, PaginatorState} from 'primeng/paginator';
 
 const emptyProduct: Product = {
   id: 0,
@@ -86,7 +86,7 @@ export class ProductListComponent implements OnInit {
     this.isDialogVisible = false;
   }
 
-  protected onAdd(product: any) {
+  protected onAdd(product: Product) {
     this.cartService.add(product, this.getQuantity(product.id));
   }
 
@@ -113,7 +113,7 @@ export class ProductListComponent implements OnInit {
     );
   });
 
-  protected onPageChange(event: any) {
+  protected onPageChange(event: PaginatorState) {
     this.first.set(event.first ?? 0);
     this.rows.set(event.rows ?? 5);
   }
